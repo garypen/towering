@@ -1,0 +1,32 @@
+[workspace]
+resolver = "2"
+
+members = [
+    "towering",
+    "towering-client",
+    "towering-server",
+]
+
+[workspace.package]
+version = "0.1.0"
+authors = [
+  "garypen <garypen@gmail.com>",
+]
+license = "Apache-2.0"
+repository = "https://github.com/garypen/towering"
+homepage = "https://github.com/garypen/towering"
+documentation = "https://github.com/garypen/towering#readme"
+edition = "2021"
+
+[workspace.dependencies]
+anyhow = "1.0.86"
+async-trait = "0.1.77"
+clap = { version = "4.5.1", features = ["derive"] }
+futures = "0.3.30"
+strum = { version = "0.26.1", features = ["derive"] }
+tokio = { version = "1.37.0", features = ["full"] }
+tower = { version = "0.5.0", features = ["full"] }
+towering = { version = "0.1.0", path = "towering" }
+tracing = { version = "0.1.40", features = ["log"] }
+tracing-subscriber = { version = "0.3.18", features = ["env-filter", "json"] }
+uuid = { version = "1.7.0", features = ["v4"] }
