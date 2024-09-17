@@ -3,6 +3,7 @@ resolver = "2"
 
 members = [
     "towering",
+    "towering-http",
     "towering-client",
     "towering-http-server",
     "towering-server",
@@ -29,6 +30,7 @@ tokio = { version = "1.37.0", features = ["full"] }
 tower = { version = "0.5.0", features = ["full"] }
 tower-test = "0.4.0"
 towering = { version = "0.1.0", path = "towering" }
+towering-http = { version = "0.1.0", path = "towering-http" }
 tracing = { version = "0.1.40", features = ["log"] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter", "json"] }
 uuid = { version = "1.7.0", features = ["v4"] }

@@ -7,5 +7,4 @@ edition = "2021"
 
 [dependencies]
 tokio.workspace = true
-tower.workspace = true
 
