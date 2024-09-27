@@ -2,11 +2,20 @@
 resolver = "2"
 
 members = [
+    "plugin",
     "towering",
     "towering-http",
     "towering-client",
     "towering-http-server",
-    "towering-server",
+    "towering-server"
+]
+
+default-members = [
+    "towering",
+    "towering-http",
+    "towering-client",
+    "towering-http-server",
+    "towering-server"
 ]
 
 [workspace.package]
@@ -22,6 +31,9 @@ edition = "2021"
 
 [workspace.dependencies]
 anyhow = "1.0.86"
+apollo-compiler = "=1.0.0-beta.23"
+apollo-federation = "1.55.0"
+apollo-parser = "0.8.2"
 async-trait = "0.1.77"
 clap = { version = "4.5.1", features = ["derive"] }
 futures = "0.3.30"

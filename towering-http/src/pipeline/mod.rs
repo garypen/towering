@@ -7,5 +7,6 @@
 //!
 //!
 
+pub(crate) mod graphql;
 pub(crate) mod http;
-mod json;
+pub(crate) mod json;
