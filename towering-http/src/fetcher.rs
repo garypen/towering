@@ -99,7 +99,6 @@ impl Fetcher {
                 .map_err(|e| Error::FetchFailed(BoxError::from(e), pb.to_string_lossy().into())),
             Fetcher::Net(client, url) => match op {
                 http::Method::GET | http::Method::POST => {
-                    let now = std::time::Instant::now();
                     let req: Request<Full<Bytes>> = Request::builder()
                         .method(op)
                         .header("content-type", "application/json")
@@ -110,14 +109,11 @@ impl Fetcher {
                     let data = client
                         .request(req)
                         .await
-                        .map_err(|e| Error::FetchFailed(BoxError::from(e), url.as_str().into()))?;
-                    let elapsed = now.elapsed();
-                    // println!("Elapsed Make Request: {:.2?}", elapsed);
-                    let b = data
+                        .map_err(|e| Error::FetchFailed(BoxError::from(e), url.as_str().into()))?
                         .collect()
                         .await
-                        .map_err(|e| Error::FetchFailed(BoxError::from(e), url.as_str().into()))?;
-                    let data = b.to_bytes();
+                        .map_err(|e| Error::FetchFailed(BoxError::from(e), url.as_str().into()))?
+                        .to_bytes();
                     let result = String::from_utf8(data.to_vec())
                         .map_err(|e| Error::FetchFailed(BoxError::from(e), url.as_str().into()));
                     result

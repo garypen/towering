@@ -14,7 +14,6 @@ use futures::future::BoxFuture;
 use http_body_util::BodyExt;
 use hyper::body::Body;
 use serde_json::Value;
-use tokio::io::AsyncWriteExt;
 use tower::BoxError;
 use tower::Service;
 use tower::ServiceBuilder;
@@ -71,8 +70,6 @@ where
         //
         // We'd do any pipeline routing here. For example, we might send a PassThrough
 
-        let mut stdout = tokio::io::stdout();
-
         let clone = self.inner.clone();
         let mut my_inner = std::mem::replace(&mut self.inner, clone);
 
@@ -83,18 +80,11 @@ where
                 .await
                 .map_err(axum::Error::new)?
                 .to_bytes();
-            // let output = format!("THESE ARE OUR BODY BYTES: {bytes:?}\n");
-            // let _ = stdout.write_all(output.as_bytes()).await;
 
             let mut v: Value = serde_json::from_slice(&bytes)?;
-            // let output = format!("THESE ARE OUR JSON VALUE: {v:?}\n");
-            // let _ = stdout.write_all(output.as_bytes()).await;
 
-            let now = std::time::Instant::now();
             // Invoke our new pipeline
             v = my_inner.ready().await?.call(v).await?;
-            let elapsed = now.elapsed();
-            // println!("Elapsed: {:.2?}", elapsed);
 
             // Return an HTTP Response
             Ok(Response::new(v.to_string().into()))

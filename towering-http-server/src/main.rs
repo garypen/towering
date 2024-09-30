@@ -24,7 +24,11 @@ use tower::Service;
 use tower::ServiceBuilder;
 use tower_http::decompression::RequestDecompressionLayer;
 use tower_http::limit::RequestBodyLimitLayer;
+use tracing_subscriber::fmt;
+use tracing_subscriber::prelude::*;
+use tracing_subscriber::EnvFilter;
 
+use tower_http::trace::TraceLayer;
 use towering_http::fetcher::Fetcher;
 use towering_http::GraphSupport;
 use towering_http::HttpProcessor;
@@ -72,6 +76,15 @@ async fn handle_middleware_error(method: Method, uri: Uri, err: BoxError) -> imp
 async fn main() -> anyhow::Result<()> {
     let cli = Args::parse();
 
+    let version = env!("CARGO_PKG_VERSION");
+    let name = env!("CARGO_PKG_NAME");
+
+    // Enable tracing subscriber
+    tracing_subscriber::registry()
+        .with(fmt::layer())
+        .with(EnvFilter::from_default_env())
+        .init();
+    tracing::info!(name, version, "starting...");
     let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
     // let _ = rustls::crypto::ring::default_provider().install_default();
 
@@ -109,6 +122,8 @@ async fn main() -> anyhow::Result<()> {
     let sb = ServiceBuilder::new()
         // This converts our BoxError into a usable HTTP error
         .layer(HandleErrorLayer::new(handle_middleware_error))
+        // Add an http tracing layer
+        .layer(TraceLayer::new_for_http())
         // This will cause the router to return 503 if a service isn't ready
         // Note: This is the layer which is processing the "feedback" from
         // rate_limit layers

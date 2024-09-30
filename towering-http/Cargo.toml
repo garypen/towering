@@ -17,13 +17,8 @@ http = "1.1.0"
 http-body-util = "0.1.2"
 hyper = { version = "1.4.1", features = ["full"] }
 hyper-util = { version = "0.1.9", features = ["full"] }
-# hyper-tls = "0.6.0"
-# hyper-rustls = { version = "0.27.3", default-features = false, features = ["http1", "http2", "native-tokio", "ring", "logging"] }
 hyper-rustls = { version = "0.27.3", features = ["http2", "webpki-tokio"] }
-# reqwest = { version = "0.12.7", features = ["http2", "json", "rustls-tls"] }
 rustls = { version = "0.23.13", default-features = false }
-# rustls = { version = "0.23.13", default-features = false, features = ["ring"] }
-rustls-native-certs = "0.8.0"
 serde_json = { version = "1.0.128", features = [
     "preserve_order",
     "float_roundtrip",
