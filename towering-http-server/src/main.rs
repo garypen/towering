@@ -24,6 +24,7 @@ use tower::Service;
 use tower::ServiceBuilder;
 use tower_http::decompression::RequestDecompressionLayer;
 use tower_http::limit::RequestBodyLimitLayer;
+use tracing::metadata::LevelFilter;
 use tracing_subscriber::fmt;
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::EnvFilter;
@@ -75,28 +76,37 @@ async fn main() -> anyhow::Result<()> {
 
     let version = env!("CARGO_PKG_VERSION");
     let name = env!("CARGO_PKG_NAME");
-
+    let env = EnvFilter::builder()
+        .with_default_directive(LevelFilter::INFO.into())
+        .from_env_lossy();
+    //
     // Enable tracing subscriber
     tracing_subscriber::registry()
         .with(fmt::layer())
-        .with(EnvFilter::from_default_env())
+        .with(env)
         .init();
     tracing::info!(name, version, "starting...");
-    let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
-    // let _ = rustls::crypto::ring::default_provider().install_default();
 
+    // Enably crypto
+    let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
+
+    // Retrieve our supergraph schema
     let fetcher = Fetcher::try_from(cli.schema.as_ref())?;
 
     let input_doc = fetcher.fetch(Method::GET, "".to_string()).await?;
 
+    // Parse and validate our Schema from our retrieved text
+    let schema = Schema::parse_and_validate(input_doc.as_str(), "placeholder")
+        .map_err(|e| anyhow::anyhow!(e.to_string()))?;
+
+    // Create a Supergraph from the retrieved text
     let supergraph = Supergraph::new(input_doc.as_str())?;
 
+    // Extract our subgraphs
     let subgraphs = supergraph.extract_subgraphs()?;
 
+    // Create a default Query Planner
     let qper = QueryPlanner::new(&supergraph, Default::default())?;
-
-    let schema = Schema::parse_and_validate(input_doc, "placeholder")
-        .map_err(|e| anyhow::anyhow!(e.to_string()))?;
 
     let listener = TcpListener::bind("127.0.0.1:4000").await?;
 
