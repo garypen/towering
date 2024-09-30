@@ -108,7 +108,6 @@ impl HttpProcessor {
             // Process our JSON data here
             .layer(super::json::JsonProcessorLayer::new(state.clone()))
             // A terminating function which satisfies the contract of our new pipeline
-            // .service_fn(|arg| async { Ok(arg) })
             .service_fn(|_arg: Valid<ExecutableDocument>| async {
                 Ok(serde_json::json!({"key": "value"}))
             })
@@ -123,6 +122,7 @@ impl HttpProcessor {
             // Process our GraphQL data here
             .layer(super::graphql::GraphQLProcessorLayer::new(state.clone()))
             // A terminating function which satisfies the contract of our new pipeline
+            // Note: Not invoked in this prototype
             .service_fn(|_arg: Valid<ExecutableDocument>| async {
                 Ok(serde_json::json!({"key": "value"}))
             })

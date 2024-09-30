@@ -71,8 +71,7 @@ impl TryFrom<&str> for Fetcher {
                     .with_no_client_auth();
 
                 // let mut connector = hyper_util::client::legacy::connect::HttpConnector::new();
-                let mut connector =
-                    new_async_http_connector().map_err(|e| Error::ClientBuild(e))?;
+                let mut connector = new_async_http_connector().map_err(Error::ClientBuild)?;
                 connector.set_keepalive(Some(std::time::Duration::from_secs(60)));
                 connector.set_nodelay(true);
                 connector.enforce_http(false);

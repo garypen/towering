@@ -53,22 +53,19 @@ async fn handle_middleware_error(method: Method, uri: Uri, err: BoxError) -> imp
             StatusCode::REQUEST_TIMEOUT,
             format!("`{method} {uri}` cannot be processed because service took too long {err}"),
         )
-    } else {
-        if let Some(source_err) = err
-            .source()
-            .map(|e| e.downcast_ref::<towering_http::fetcher::Error>())
-            .flatten()
-        {
-            (
+    } else if let Some(source_err) = err
+        .source()
+        .and_then(|e| e.downcast_ref::<towering_http::fetcher::Error>())
+    {
+        (
             StatusCode::GATEWAY_TIMEOUT,
             format!("`{method} {uri}` cannot be processed because downstream service took too long {source_err}"),
         )
-        } else {
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                format!("`{method} {uri}` failed with {err}"),
-            )
-        }
+    } else {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("`{method} {uri}` failed with {err}"),
+        )
     }
 }
 
