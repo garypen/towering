@@ -6,26 +6,26 @@ use std::pin::Pin;
 use std::task::Context;
 use std::task::Poll;
 
-use hickory_resolver::TokioAsyncResolver;
+use hickory_resolver::TokioResolver;
 // use hyper::service::Service;
 use hyper_util::client::legacy::connect::dns::Name;
 use hyper_util::client::legacy::connect::HttpConnector;
 use tower::Service;
 
 /// Wrapper around hickory-dns-resolver's
-/// [`TokioAsyncResolver`](https://docs.rs/hickory-dns-resolver/0.24.1/hickory_dns_resolver/type.TokioAsyncResolver.html)
+/// [`TokioResolver`](https://docs.rs/hickory-dns-resolver/0.24.1/hickory_dns_resolver/type.TokioResolver.html)
 ///
 /// The resolver runs a background Task which manages dns requests. When a new resolver is created,
 /// the background task is also created, it needs to be spawned on top of an executor before using the client,
 /// or dns requests will block.
 #[derive(Debug, Clone)]
-pub struct AsyncHyperResolver(TokioAsyncResolver);
+pub struct AsyncHyperResolver(TokioResolver);
 
 impl AsyncHyperResolver {
     /// constructs a new resolver from default configuration, uses the corresponding method of
-    /// [`TokioAsyncResolver`](https://docs.rs/hickory-dns-resolver/0.24.1/hickory_dns_resolver/type.TokioAsyncResolver.html#method.new)
+    /// [`TokioResolver`](https://docs.rs/hickory-dns-resolver/0.24.1/hickory_dns_resolver/type.TokioResolver.html#method.new)
     pub(crate) fn new_from_system_conf() -> Result<Self, io::Error> {
-        let resolver = TokioAsyncResolver::tokio_from_system_conf()?;
+        let resolver = TokioResolver::builder_tokio()?.build();
         Ok(Self(resolver))
     }
 }
