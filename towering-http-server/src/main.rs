@@ -191,7 +191,7 @@ async fn main() -> anyhow::Result<()> {
 #[cfg(test)]
 mod tests {
 
-    use tower_test::*;
+    // use tower_test::*;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_something() {
