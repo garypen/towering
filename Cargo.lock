@@ -151,22 +151,28 @@ dependencies = [
 
 [[package]]
 name = "apollo-federation"
-version = "1.61.0"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "502811c0c91a9c521d5af98e8aefa0cc8ddd509312b7ef76fe8149f1a6fc3a8d"
+checksum = "95e9c2cbf9174d265265f34aa4305613da20537d91d5d51a84e08778f505d409"
 dependencies = [
  "apollo-compiler",
  "derive_more",
  "either",
  "hashbrown 0.15.5",
+ "http",
  "indexmap",
  "itertools 0.13.0",
+ "line-col",
  "multimap",
  "nom",
+ "nom_locate",
+ "once_cell",
  "petgraph",
  "regex",
  "serde",
+ "serde_json",
  "serde_json_bytes",
+ "shape",
  "strum",
  "strum_macros",
  "thiserror 1.0.69",
@@ -394,6 +400,12 @@ checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
 dependencies = [
  "allocator-api2",
 ]
+
+[[package]]
+name = "bytecount"
+version = "0.6.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "175812e0be2bccb6abe50bb8d566126198344f707e304f45c648fd8f2cc0365e"
 
 [[package]]
 name = "bytemuck"
@@ -1883,6 +1895,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "line-col"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e69cdf6b85b5c8dce514f694089a2cf8b1a702f6cd28607bcb3cf296c9778db"
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.4.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2067,6 +2085,17 @@ checksum = "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
 dependencies = [
  "memchr",
  "minimal-lexical",
+]
+
+[[package]]
+name = "nom_locate"
+version = "4.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e3c83c053b0713da60c5b8de47fe8e494fe3ece5267b2f23090a07a053ba8f3"
+dependencies = [
+ "bytecount",
+ "memchr",
+ "nom",
 ]
 
 [[package]]
@@ -2909,6 +2938,18 @@ dependencies = [
  "cfg-if",
  "cpufeatures",
  "digest",
+]
+
+[[package]]
+name = "shape"
+version = "0.5.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4a10b07e1a5468f99462d90dc59924f8fc90da58d1694ba5dd1036107d3d4c9c"
+dependencies = [
+ "apollo-compiler",
+ "indexmap",
+ "serde_json",
+ "serde_json_bytes",
 ]
 
 [[package]]
@@ -4283,7 +4324,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.48.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
