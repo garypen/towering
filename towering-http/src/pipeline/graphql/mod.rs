@@ -81,7 +81,7 @@ where
                 .build_query_plan(&req, name, Default::default())?;
 
             if let Some(TopLevelPlanNode::Fetch(node)) = qp.node {
-                let q = node.operation_document.serialize().no_indent().to_string();
+                let q = node.operation_document.as_serialized().to_string();
                 let sg = &my_state
                     .subgraphs
                     .get(&node.subgraph_name)
